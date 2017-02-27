@@ -18,20 +18,18 @@ import java.util.stream.Collectors;
 /**
  * Created by kkuznetsov on 2/15/2017.
  */
-public class UIConstructorPanelElement extends VBox {
+public class UIElementConstructor extends VBox {
 
+  private List<Class> classes;
+  private Constructor constructor;
+  private String[] argsNames;
+  private String[] argsValues;
 
-  List<Class> classes;
-  Constructor constructor;
-  String[] argsNames;
-  String[] argsValues;
+  private VBox selectBox = new VBox(5);
+  private HBox argsBox = new HBox(10);
+  private ComboBox<String> avalaibleClasses = new ComboBox<>();
 
-  VBox selectBox = new VBox(5);
-  HBox argsBox = new HBox(10);
-  ComboBox<String> avalaibleClasses = new ComboBox<>();
-  Button addButton = new Button("Add");
-
-  public UIConstructorPanelElement(Package pakage) {
+  UIElementConstructor(Package pakage) {
     super();
     String pakStr = pakage.toString();
     classes = ClassFinder.find(pakStr.substring(8)).stream()
@@ -42,7 +40,7 @@ public class UIConstructorPanelElement extends VBox {
         FXCollections.observableList(classes.stream().map(Class::getName).collect(Collectors.toList())));
 
     setActions();
-    selectBox.getChildren().addAll(avalaibleClasses, addButton);
+    selectBox.getChildren().addAll(avalaibleClasses);
 
     this.getChildren().addAll(selectBox, argsBox);
   }
@@ -67,24 +65,30 @@ public class UIConstructorPanelElement extends VBox {
           argsNames = uiConstructor.args();
           argsBox.getChildren().clear();
           for (String arg : argsNames) {
-            argsBox.getChildren().add( new TextField(arg));
+            argsBox.getChildren().add(new TextField(arg));
           }
 
         }
       }
     });
 
-    addButton.setOnAction(event -> {
-        final int argsCount = argsBox.getChildren().size();
-        argsValues = new String[argsCount];
-        for (int i =0; i < argsCount; i++){
-         argsValues[i] = ((TextField) argsBox.getChildren().get(i)).getText();
-        }
-      System.out.println(Arrays.asList(argsValues));
-      selectBox.getChildren().clear();
-      argsBox.getChildren().forEach(element -> element.setDisable(true));
-    });
   }
 
+  public AttributedConstructor getAttributedConstructor() {
+    final int argsCount = argsBox.getChildren().size();
+    argsValues = new String[argsCount];
+    for (int i = 0; i < argsCount; i++) {
+      argsValues[i] = ((TextField) argsBox.getChildren().get(i)).getText();
+    }
+    if (constructor != null && argsValues.length > 0) {
 
+      System.out.println(Arrays.asList(argsValues));
+    selectBox.getChildren().clear();
+    argsBox.getChildren().forEach(element -> element.setDisable(true));
+
+      return new AttributedConstructor(constructor, argsValues);
+    } else {
+      return null;
+    }
+  }
 }
