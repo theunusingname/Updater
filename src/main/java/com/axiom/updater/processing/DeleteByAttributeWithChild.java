@@ -1,5 +1,7 @@
 package com.axiom.updater.processing;
 
+import com.axiom.ui.uiConstructor.UIConstructedClass;
+import com.axiom.ui.uiConstructor.UIConstructor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -9,13 +11,15 @@ import java.util.stream.Collectors;
 /**
  * Created by kkuznetsov on 2/13/2017.
  */
+@UIConstructedClass
 public class DeleteByAttributeWithChild extends DocumentChange {
 
     private final String parentAttrName;
     private final String parentAttrValue;
     private final String childAttrName;
     private final String childAttrVlue;
-
+    @UIConstructor(args = {"parentAttrName", "parentAttrValue",
+        "childAttrName", "childAttrVlue"})
     public DeleteByAttributeWithChild(String parentAttrName, String parentAttrValue, String childAttrName, String childAttrVlue) {
         this.parentAttrName = parentAttrName;
         this.parentAttrValue = parentAttrValue;

@@ -1,5 +1,6 @@
 package com.axiom.ui;
 
+import com.axiom.ui.uiConstructor.UIConstructorPanel;
 import com.axiom.ui.uiConstructor.UIConstructorPanelElement;
 import com.axiom.updater.Updater;
 import com.axiom.updater.processing.Change;
@@ -41,7 +42,7 @@ public class App  extends Application{
   private Button submit;
   private TextField directory;
 
-  private UIConstructorPanelElement uIconstructor;
+  private UIConstructorPanel uIconstructor;
 
 
   @Override
@@ -65,7 +66,7 @@ public class App  extends Application{
     submit = new Button("Submit");
     submit.setDisable(true);
 
-    uIconstructor = new UIConstructorPanelElement(Change.class.getPackage());
+    uIconstructor = new UIConstructorPanel(Change.class.getPackage());
 
     choseFilesBox.setScaleShape(true);
     choseFilesBox.getChildren().addAll(openButton, directory);

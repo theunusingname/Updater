@@ -2,6 +2,7 @@ package com.axiom.ui.uiConstructor;
 
 import com.axiom.updater.ClassFinder;
 import javafx.collections.FXCollections;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -23,6 +24,7 @@ public class UIConstructorPanelElement extends VBox {
   List<Class> classes;
   Constructor constructor;
   String[] argsNames;
+  String[] argsValues;
 
   VBox selectBox = new VBox(5);
   HBox argsBox = new HBox(10);
@@ -47,7 +49,8 @@ public class UIConstructorPanelElement extends VBox {
 
   private void setActions() {
 
-    avalaibleClasses.setOnShowing(event -> {
+    avalaibleClasses.setOnAction(event -> {
+
       String className = avalaibleClasses.getValue();
       if (className != null) {
         Class clazz = classes.stream()
@@ -62,9 +65,9 @@ public class UIConstructorPanelElement extends VBox {
           UIConstructor uiConstructor = (UIConstructor) constructor.getAnnotation(UIConstructor.class);
 
           argsNames = uiConstructor.args();
-
+          argsBox.getChildren().clear();
           for (String arg : argsNames) {
-            argsBox.getChildren().add(0, new TextField(arg));
+            argsBox.getChildren().add( new TextField(arg));
           }
 
         }
@@ -72,7 +75,14 @@ public class UIConstructorPanelElement extends VBox {
     });
 
     addButton.setOnAction(event -> {
-
+        final int argsCount = argsBox.getChildren().size();
+        argsValues = new String[argsCount];
+        for (int i =0; i < argsCount; i++){
+         argsValues[i] = ((TextField) argsBox.getChildren().get(i)).getText();
+        }
+      System.out.println(Arrays.asList(argsValues));
+      selectBox.getChildren().clear();
+      argsBox.getChildren().forEach(element -> element.setDisable(true));
     });
   }
 
