@@ -1,5 +1,7 @@
 package com.axiom.updater.processing;
 
+import com.axiom.ui.uiConstructor.UIConstructedClass;
+import com.axiom.ui.uiConstructor.UIConstructor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -8,6 +10,7 @@ import java.util.List;
 /**
  * Created by kkuznetsov on 2/13/2017.
  */
+@UIConstructedClass
 public class SwapAttrValueInSpecifiedParent extends DocumentChange {
 
     private final String parentAttrName;
@@ -16,6 +19,7 @@ public class SwapAttrValueInSpecifiedParent extends DocumentChange {
     private final String old;
     private final String newVal;
 
+    @UIConstructor(args = {"parent have attr", "parent attr value", "child attr name", "child attr old value", "child attr new value"})
     public SwapAttrValueInSpecifiedParent(String parentAttrName, String parentAttrValue, String childAttrName, String old, String newVal) {
         this.parentAttrName = parentAttrName;
         this.parentAttrValue = parentAttrValue;
