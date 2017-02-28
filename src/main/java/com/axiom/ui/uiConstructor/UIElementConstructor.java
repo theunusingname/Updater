@@ -2,14 +2,11 @@ package com.axiom.ui.uiConstructor;
 
 import com.axiom.updater.ClassFinder;
 import javafx.collections.FXCollections;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;

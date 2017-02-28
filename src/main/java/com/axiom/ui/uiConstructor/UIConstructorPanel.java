@@ -67,4 +67,8 @@ public class UIConstructorPanel extends VBox {
        listView.setItems(FXCollections.observableArrayList(constructors.keySet()));
     });
   }
+
+  public Iterable<AttributedConstructor> getConstructors() {
+    return constructors.values();
+  }
 }

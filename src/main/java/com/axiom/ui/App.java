@@ -1,5 +1,6 @@
 package com.axiom.ui;
 
+import com.axiom.ui.uiConstructor.AttributedConstructor;
 import com.axiom.ui.uiConstructor.UIConstructorPanel;
 import com.axiom.updater.Updater;
 import com.axiom.updater.processing.Change;
@@ -20,6 +21,10 @@ import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by theun on 10.02.2017.
@@ -114,6 +119,17 @@ public class App  extends Application{
 
     submit.setOnAction(event -> {
       try {
+        List<Change> changes = StreamSupport.stream( uIconstructor
+            .getConstructors().spliterator(),false).map(constructor -> {
+          try {
+            return (Change)constructor.invokeConstructor();
+          } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            e.printStackTrace();
+            return null;
+          }
+        })
+            .collect(Collectors.toList());
+        changes.forEach(change -> updater.addChange(change));
         updater.update();
       } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
         e.printStackTrace();
