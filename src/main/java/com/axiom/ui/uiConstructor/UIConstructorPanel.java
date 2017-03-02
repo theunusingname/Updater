@@ -7,9 +7,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by theun on 27.02.2017.
@@ -20,6 +24,9 @@ public class UIConstructorPanel extends VBox {
   private UIElementConstructor constructor;
 
   private Map<String, AttributedConstructor> constructors = new HashMap<>();
+
+  private Button saveChanges = new Button("Save Changes");
+  private Button loadChanges = new Button("Load changes");
 
   private Button addButton = new Button("Add");
   private Button deleteButton = new Button("Delete");
@@ -36,7 +43,7 @@ public class UIConstructorPanel extends VBox {
 
     this.pakage = pakage;
     constructor = new UIElementConstructor(pakage);
-    addBox.getChildren().addAll(idField, addButton);
+    addBox.getChildren().addAll(idField, addButton, saveChanges, loadChanges);
     this.getChildren().addAll(constructor, addBox, listView, deleteButton);
     setActions();
   }
@@ -65,6 +72,33 @@ public class UIConstructorPanel extends VBox {
        listView.getSelectionModel().getSelectedItems().forEach(item ->
            constructors.remove(item));
        listView.setItems(FXCollections.observableArrayList(constructors.keySet()));
+    });
+
+    loadChanges.setOnAction(event -> {
+      FileChooser fileChooser = new FileChooser();
+      File fileToLoad = fileChooser.showOpenDialog(null);
+      try {
+        FileInputStream fis = new FileInputStream(fileToLoad);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        constructors = (Map<String, AttributedConstructor>) ois.readObject();
+
+        listView.setItems(FXCollections.observableArrayList(constructors.keySet()));
+      } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
+      }
+    });
+
+    saveChanges.setOnAction(event -> {
+      FileChooser fileChooser = new FileChooser();
+      File fileToSave = fileChooser.showSaveDialog(null);
+      try {
+        FileOutputStream fos = new FileOutputStream(fileToSave);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+        oos.writeObject(constructors);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     });
   }
 

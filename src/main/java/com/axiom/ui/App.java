@@ -53,7 +53,7 @@ public class App  extends Application{
   public void start(Stage primaryStage) throws Exception {
     primaryStage.setTitle("update defaults");
 
-    Scene mainScene = new Scene(rootNode,500,250);
+    Scene mainScene = new Scene(rootNode,800,600);
     primaryStage.setScene(mainScene);
 
     newPropsApplyButton = new Button("Apply");
