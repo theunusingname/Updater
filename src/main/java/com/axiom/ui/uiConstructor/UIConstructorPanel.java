@@ -14,6 +14,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Created by theun on 27.02.2017.
@@ -23,7 +24,7 @@ public class UIConstructorPanel extends VBox {
   private final Package pakage;
   private UIElementConstructor constructor;
 
-  private Map<String, AttributedConstructor> constructors = new HashMap<>();
+  private Map<String, AttributedConstructor> constructors = new TreeMap<>();
 
   private Button saveChanges = new Button("Save Changes");
   private Button loadChanges = new Button("Load changes");

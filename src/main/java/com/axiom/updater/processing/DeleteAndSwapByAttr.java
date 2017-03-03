@@ -47,7 +47,7 @@ public class DeleteAndSwapByAttr extends DocumentChange {
 
     @Override
     public void apply(Document doc) { // TODO: 3/2/2017 переделать
-        List<Node> nodes = super.documentWalker(doc.getChildNodes());
+        List<Node> nodes = documentWalker(doc.getChildNodes());
         List<Node> toDeleteNodes = nodes.stream()
                 .filter(Node::hasAttributes)
                 .filter(node -> node.getAttributes().getNamedItem("value") != null)

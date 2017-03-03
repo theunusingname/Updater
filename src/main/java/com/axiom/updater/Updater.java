@@ -192,42 +192,4 @@ public class Updater {
     }
 
 
-
-
-//    private void addNodes(Node destination, Node ... nodes){
-//        Arrays.stream(nodes)
-//                .forEach(destination::appendChild);
-//    }
-//
-//    private Node constructNode(Document document, String elementName, Node ... attrs){
-//       Node node = document.createElement(elementName);
-//       for (Node attr : attrs) {
-//           node.getAttributes().setNamedItem(attr);
-//       }
-//       return node;
-//    }
-//
-//    private Node constructAttrNode(Document document, String name, String value){
-//        Node node = document.createElement(name);
-//        node.setNodeValue(value);
-//        return node;
-//    }
-
-//    public static void main(String[] args) {
-//        if (args.length == 0){
-//            System.out.println("specify export folder");
-//            return;
-//        }
-//
-//        Updater updater = new Updater(args[0]);
-//        try {
-//            updater.update();
-//        } catch (ParserConfigurationException | IOException | SAXException | TransformerException e) {
-//            e.printStackTrace();
-//        }
-//        Vector<Integer> vect = new Vector<>();
-//        List<Integer> in = new ArrayList<>(vect);
-//
-//    }
-
 }
