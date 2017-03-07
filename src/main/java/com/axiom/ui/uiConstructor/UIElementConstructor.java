@@ -1,6 +1,5 @@
 package com.axiom.ui.uiConstructor;
 
-import com.axiom.updater.ClassFinder;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;

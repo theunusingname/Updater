@@ -1,4 +1,4 @@
-package com.axiom.updater;
+package com.axiom.ui.uiConstructor;
 
 import java.io.File;
 import java.net.URL;

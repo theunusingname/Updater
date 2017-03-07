@@ -8,13 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by theun on 27.02.2017.
@@ -24,10 +21,14 @@ public class UIConstructorPanel extends VBox {
   private final Package pakage;
   private UIElementConstructor constructor;
 
-  private Map<String, AttributedConstructor> constructors = new TreeMap<>();
+  private LinkedHashMap<String, AttributedConstructor> constructors = new LinkedHashMap<>();
 
   private Button saveChanges = new Button("Save Changes");
   private Button loadChanges = new Button("Load changes");
+
+  private HBox upDown = new HBox(5);
+  private Button upButton = new Button("↑");
+  private Button downButton = new Button("↓");
 
   private Button addButton = new Button("Add");
   private Button deleteButton = new Button("Delete");
@@ -44,8 +45,9 @@ public class UIConstructorPanel extends VBox {
 
     this.pakage = pakage;
     constructor = new UIElementConstructor(pakage);
+    upDown.getChildren().addAll(upButton,downButton);
     addBox.getChildren().addAll(idField, addButton, saveChanges, loadChanges);
-    this.getChildren().addAll(constructor, addBox, listView, deleteButton);
+    this.getChildren().addAll(constructor, addBox, upDown, listView, deleteButton);
     setActions();
   }
 
@@ -81,7 +83,7 @@ public class UIConstructorPanel extends VBox {
       try {
         FileInputStream fis = new FileInputStream(fileToLoad);
         ObjectInputStream ois = new ObjectInputStream(fis);
-        constructors = (Map<String, AttributedConstructor>) ois.readObject();
+        constructors = (LinkedHashMap<String, AttributedConstructor>) ois.readObject();
 
         listView.setItems(FXCollections.observableArrayList(constructors.keySet()));
       } catch (IOException | ClassNotFoundException e) {
@@ -100,6 +102,73 @@ public class UIConstructorPanel extends VBox {
       } catch (IOException e) {
         e.printStackTrace();
       }
+    });
+
+    upButton.setOnAction(event -> {
+      String keyToUp = listView.getSelectionModel().getSelectedItem();
+      List<String> keys = constructors.keySet()
+              .stream()
+              .collect(Collectors.toList());
+      int oldIndex = keys.indexOf(keyToUp);
+      List<String> ordered;
+      LinkedHashMap<String, AttributedConstructor> sortedConstructors;
+      if (oldIndex > 0 ){
+        String keyToDown = keys.get(oldIndex -1);
+        ordered = keys.stream()
+                .sorted((a,b) ->{
+                  if ( b == keyToDown && a == keyToUp){
+                    return -1;
+                  }
+                  return 1;
+                })
+        .collect(Collectors.toList());
+
+        sortedConstructors = new LinkedHashMap<>();
+
+        Iterator<String> it = ordered.iterator();
+        while (it.hasNext()){
+          String key = it.next();
+          sortedConstructors.put(key, constructors.get(key));
+        }
+
+        constructors = sortedConstructors;
+      }
+
+      listView.setItems(FXCollections.observableArrayList(constructors.keySet()));
+
+    });
+
+    downButton.setOnAction(event -> {
+      String keyToD = listView.getSelectionModel().getSelectedItem();
+      List<String> keys = constructors.keySet()
+              .stream()
+              .collect(Collectors.toList());
+      int oldIndex = keys.indexOf(keyToD);
+      List<String> ordered;
+      LinkedHashMap<String, AttributedConstructor> sortedConstructors;
+      if (oldIndex < keys.size()-1 ){
+        String keyToU = keys.get(oldIndex +1);
+        ordered = keys.stream()
+                .sorted((a,b) ->{
+                  if ( a == keyToU && b == keyToD){
+                    return -1;
+                  }
+                  return 1;
+                })
+                .collect(Collectors.toList());
+
+        sortedConstructors = new LinkedHashMap<>();
+
+        Iterator<String> it = ordered.iterator();
+        while (it.hasNext()){
+          String key = it.next();
+          sortedConstructors.put(key, constructors.get(key));
+        }
+
+        constructors = sortedConstructors;
+      }
+
+      listView.setItems(FXCollections.observableArrayList(constructors.keySet()));
     });
   }
 
