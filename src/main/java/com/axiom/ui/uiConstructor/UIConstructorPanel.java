@@ -83,7 +83,8 @@ public class UIConstructorPanel extends VBox {
       try {
         FileInputStream fis = new FileInputStream(fileToLoad);
         ObjectInputStream ois = new ObjectInputStream(fis);
-        constructors = (LinkedHashMap<String, AttributedConstructor>) ois.readObject();
+        Map<String, AttributedConstructor> loadedMap = (Map<String, AttributedConstructor>) ois.readObject();
+        loadedMap.keySet().forEach(key -> constructors.merge(key, loadedMap.get(key), (a,b) -> a ));
 
         listView.setItems(FXCollections.observableArrayList(constructors.keySet()));
       } catch (IOException | ClassNotFoundException e) {
