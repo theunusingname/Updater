@@ -1,11 +1,8 @@
 package com.axiom.ui;
 
-import com.axiom.ui.uiConstructor.AttributedConstructor;
 import com.axiom.ui.uiConstructor.UIConstructorPanel;
 import com.axiom.updater.Updater;
 import com.axiom.updater.processing.Change;
-import org.xml.sax.SAXException;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;

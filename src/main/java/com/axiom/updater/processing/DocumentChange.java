@@ -1,7 +1,6 @@
 package com.axiom.updater.processing;
 
 
-import com.sun.istack.internal.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -45,7 +44,7 @@ public abstract class DocumentChange implements Change {
                 .forEach(destination::appendChild);
     }
 
-    public static Node constructNode(Document document, String elementName, @Nullable Node ... attrs){
+    public static Node constructNode(Document document, String elementName, Node ... attrs){
        Node node = document.createElement(elementName);
 
        if (attrs != null) {

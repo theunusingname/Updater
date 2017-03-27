@@ -18,8 +18,9 @@ public class DeleteByAttributeWithChild extends DocumentChange {
     private final String parentAttrValue;
     private final String childAttrName;
     private final String childAttrVlue;
+
     @UIConstructor(args = {"parentAttrName", "parentAttrValue",
-        "childAttrName", "childAttrVlue"})
+            "childAttrName", "childAttrVlue"})
     public DeleteByAttributeWithChild(String parentAttrName, String parentAttrValue, String childAttrName, String childAttrVlue) {
         this.parentAttrName = parentAttrName;
         this.parentAttrValue = parentAttrValue;

@@ -19,7 +19,7 @@ public class SwapAttrValueInSpecifiedParent extends DocumentChange {
     private final String old;
     private final String newVal;
 
-    @UIConstructor(args = {"parent have attr", "parent attr value", "child attr name", "child attr old value", "child attr new value"})
+    @UIConstructor(args = {"parent attr name", "parent attr value", "child attr name", "child attr old value", "child attr new value"})
     public SwapAttrValueInSpecifiedParent(String parentAttrName, String parentAttrValue, String childAttrName, String old, String newVal) {
         this.parentAttrName = parentAttrName;
         this.parentAttrValue = parentAttrValue;
