@@ -4,8 +4,11 @@ import com.axiom.ui.uiConstructor.UIConstructorPanel;
 import com.axiom.updater.Updater;
 import com.axiom.updater.processing.Change;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -40,8 +43,10 @@ public class App extends Application {
     private TextArea oldDefProps = new TextArea();
 
     private Button newPropsApplyButton;
+    private CheckBox saveAsXML;
     private Button openButton;
     private Button submit;
+    private Button copy;
     private TextField directory;
 
     private UIConstructorPanel uIconstructor;
@@ -59,6 +64,8 @@ public class App extends Application {
         newPropsApplyButton.setDisable(true);
         directory = new TextField("Clik open to select export folder");
 
+        saveAsXML = new CheckBox("Save default.properties as defaulp.bp");
+        saveAsXML.setIndeterminate(false);
         directory.setEditable(false);
 
         defprops.setText("paste new properties here");
@@ -66,14 +73,17 @@ public class App extends Application {
         oldDefProps.setText("old default.properties");
 
         submit = new Button("Submit");
+        copy = new Button(">>");
         submit.setDisable(true);
 
         uIconstructor = new UIConstructorPanel(Change.class.getPackage());
 
         choseFilesBox.setScaleShape(true);
         choseFilesBox.getChildren().addAll(openButton, directory);
-        newPropsBox.getChildren().addAll(defprops, newPropsApplyButton);
-        textBox.getChildren().addAll(oldDefProps, newPropsBox);
+        newPropsBox.getChildren().addAll(defprops, newPropsApplyButton, saveAsXML);
+        textBox.getChildren().addAll(oldDefProps, copy, newPropsBox);
+        textBox.fillHeightProperty().setValue(true);
+        textBox.minHeight(400);
         rootNode.getChildren().addAll(choseFilesBox, textBox, uIconstructor, submit);
 
         this.setActions(primaryStage);
@@ -107,12 +117,15 @@ public class App extends Application {
             }
         });
 
-        newPropsApplyButton.setOnAction(event -> {
-            if (updater != null) {
-                updater.setDefaultProps(defprops.getText());
-                System.out.println("new props set to: \n" + defprops.getText());
-                submit.setDisable(false);
-            }
+        newPropsApplyButton.setOnAction(new ApplyHandler());
+
+        saveAsXML.setOnAction(event -> {
+            updater.setSwithPropertiesToBp(saveAsXML.isSelected());
+        });
+
+        copy.setOnAction(event -> {
+            defprops.setText(oldDefProps.getText());
+            new ApplyHandler().handle(event);
         });
 
         submit.setOnAction(event -> {
@@ -135,4 +148,17 @@ public class App extends Application {
             }
         });
     }
+
+    private class ApplyHandler implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent event) {
+            if (updater != null) {
+                updater.setDefaultProps(defprops.getText());
+                System.out.println("new props set to: \n" + defprops.getText());
+                submit.setDisable(false);
+            }
+        }
+    }
 }
+

@@ -9,7 +9,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,7 +16,6 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -31,6 +29,7 @@ public class Updater {
 
     private String defaultProps;
 
+    private boolean swithPropertiesToBp = false;
     private List<Change> changes = new ArrayList<>();
     private List<File> affectedFiles = new ArrayList<>();
     private List<File> xmlFiles = new ArrayList<>();
@@ -49,6 +48,10 @@ public class Updater {
         props = affectedFiles.stream().filter(propsFilter::accept).collect(Collectors.toList());
         xmlFiles = affectedFiles.stream().filter(xmlFilter::accept).collect(Collectors.toList());
 
+    }
+
+    public void setSwithPropertiesToBp(boolean swithPropertiesToBp) {
+        this.swithPropertiesToBp = swithPropertiesToBp;
     }
 
     public void setDefaultProps(String defaultProps) {
@@ -90,7 +93,7 @@ public class Updater {
 
                 Document document = getDocument(file);
 
-                changes.forEach(change -> change.apply(document));
+                changes.stream().forEachOrdered(change -> change.apply(document));
 //            swapAttrValue(allNodes, "type", "DataSource:workflowDelegate", "LoadSource:workflowDelegate");
 //            swapAttrValue(allNodes, "type", "DataSource:taskKeyParameters", "LoadSource:taskKeyParameters");
 //            swapAttrValue(allNodes, "type", "FileLoaderParameters:taskKeyParameters", "LoadSource:genericLoaderKeyParameters");
@@ -141,8 +144,15 @@ public class Updater {
 
             progressWidget.setTextInfo("updating: "+ file.getName());
 
-            System.out.println("updating properties in " + file );
-            Writer writer = new FileWriter(file, false);
+            File prop;
+            if (swithPropertiesToBp){
+                prop = new File(file.getAbsolutePath().replace("default.properties", "default.bp"));
+            } else {
+                prop = file;
+            }
+
+            System.out.println("updating properties in " + prop );
+            Writer writer = new FileWriter(prop, false);
             writer.write(defaultProps);
             writer.close();
 
