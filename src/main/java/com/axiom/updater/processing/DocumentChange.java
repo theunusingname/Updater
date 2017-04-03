@@ -14,18 +14,8 @@ import java.util.stream.Stream;
 /**
  * Created by kkuznetsov on 2/13/2017.
  */
-public abstract class DocumentChange implements Change {
+public abstract class DocumentChange implements Change<Document> {
 
-    public static List<Node> documentWalker(NodeList nodeList) {
-        ArrayList<Node> accu = new ArrayList<>();
-        if (nodeList.getLength() != 0) {
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                accu.add(nodeList.item(i));
-                accu.addAll(documentWalker(nodeList.item(i).getChildNodes()));
-            }
-        }
-        return accu;
-    }
 
     public Stream<Node> childesWithAttributes(Node node) {
         List<Node> result = new ArrayList<>();
