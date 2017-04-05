@@ -70,8 +70,14 @@ public class Updater {
         return builder.parse(file);
     }
 
-    public String getCurrentDefaultProperties() throws FileNotFoundException{
-        Scanner scanner = new Scanner(props.stream().findFirst().orElse(new File("")));
+    public String getCurrentDefaultProperties()
+    {
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(props.stream().findFirst().orElse(new File("")));
+        } catch (FileNotFoundException e) {
+            return "";
+        }
         StringBuilder builder = new StringBuilder();
         while (scanner.hasNext()){
             builder.append(scanner.nextLine()+"\n");
@@ -162,6 +168,10 @@ public class Updater {
 
         System.out.println("finish");
 
+    }
+
+    public void clear(){
+        changes.clear();
     }
 
 

@@ -173,6 +173,11 @@ public class UIConstructorPanel extends VBox {
     });
   }
 
+  public void clear(){
+    listView.getItems().clear();
+    constructors.clear();
+  }
+
   public Iterable<AttributedConstructor> getConstructors() {
     return constructors.values();
   }

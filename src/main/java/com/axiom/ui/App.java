@@ -20,7 +20,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -46,6 +45,7 @@ public class App extends Application {
     private CheckBox saveAsXML;
     private Button openButton;
     private Button submit;
+    private Button clear;
     private Button copy;
     private TextField directory;
 
@@ -76,6 +76,9 @@ public class App extends Application {
         copy = new Button(">>");
         submit.setDisable(true);
 
+        clear = new Button("Clear");
+        clear.setDisable(true);
+
         uIconstructor = new UIConstructorPanel(Change.class.getPackage());
 
         choseFilesBox.setScaleShape(true);
@@ -84,7 +87,7 @@ public class App extends Application {
         textBox.getChildren().addAll(oldDefProps, copy, newPropsBox);
         textBox.fillHeightProperty().setValue(true);
         textBox.minHeight(400);
-        rootNode.getChildren().addAll(choseFilesBox, textBox, uIconstructor, submit);
+        rootNode.getChildren().addAll(choseFilesBox, textBox, uIconstructor, clear, submit);
 
         this.setActions(primaryStage);
 
@@ -108,12 +111,8 @@ public class App extends Application {
             if (exportDir != null) {
                 directory.setText(exportDir.getAbsolutePath());
                 updater = new Updater(exportDir.getAbsolutePath());
-                try {
-                    oldDefProps.setText(updater.getCurrentDefaultProperties());
-                    newPropsApplyButton.setDisable(false);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                oldDefProps.setText(updater.getCurrentDefaultProperties());
+                newPropsApplyButton.setDisable(false);
             }
         });
 
@@ -126,6 +125,13 @@ public class App extends Application {
         copy.setOnAction(event -> {
             defprops.setText(oldDefProps.getText());
             new ApplyHandler().handle(event);
+        });
+
+        clear.setOnAction(event -> {
+            updater.clear();
+            defprops.setText("");
+            uIconstructor.clear();
+            submit.setDisable(true);
         });
 
         submit.setOnAction(event -> {
@@ -146,6 +152,7 @@ public class App extends Application {
             } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
                 e.printStackTrace();
             }
+            clear.setDisable(false);
         });
     }
 
